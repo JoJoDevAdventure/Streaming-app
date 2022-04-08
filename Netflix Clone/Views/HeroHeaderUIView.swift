@@ -12,7 +12,7 @@ class HeroHeaderUIView: UIView {
     private let downloadButton: UIButton = {
         let button = UIButton()
         button.setTitle("Download", for: .normal)
-        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.5)
+        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.7)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -24,7 +24,7 @@ class HeroHeaderUIView: UIView {
     private let playButton: UIButton = {
         let button = UIButton()
         button.setTitle("Play", for: .normal)
-        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.5)
+        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.7)
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -82,6 +82,12 @@ class HeroHeaderUIView: UIView {
         ]
         gradientLayer.frame = bounds
         layer.addSublayer(gradientLayer)
+    }
+    
+    public func configure(with model: String) {
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else { return }
+        print("CHARGED")
+        heroImageView.sd_setImage(with: url, completed: nil)
     }
     
 }

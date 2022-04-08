@@ -17,6 +17,8 @@ enum Sections: Int {
 
 class HomeViewController: UIViewController {
     
+    var titleSelected : Title?
+    
     let sectionTitles: [String] = ["Trending Movies", "Trending Tv", "Upcoming movies",  "Popular", "Top rated"]
     
     private let homeFeedTable: UITableView = {
@@ -33,7 +35,10 @@ class HomeViewController: UIViewController {
         homeFeedTable.delegate = self
         homeFeedTable.dataSource = self
         
+        fetchHeader()
         let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        guard let poster = titleSelected?.poster_path else { return }
+        headerView.configure(with: poster)
         homeFeedTable.tableHeaderView = headerView
         
         configureNavBar()
@@ -54,6 +59,22 @@ class HomeViewController: UIViewController {
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
         ]
         navigationController?.navigationBar.tintColor = .label
+    }
+    
+    private func fetchHeader() {
+        DispatchQueue.main.async {
+            APICaller.shared.getTopRated { Result in
+                switch Result {
+                case .success(let titles):
+                    let random = Int.random(in: 0..<titles.count)
+                    print(random)
+                    self.titleSelected = titles[random]
+                    print(self.titleSelected)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 
 }

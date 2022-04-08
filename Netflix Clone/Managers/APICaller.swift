@@ -103,4 +103,39 @@ class APICaller {
         task.resume()
     }
     
+    func getDiscoverTv(completion: @escaping (Result<[Title], Error>) -> Void) {
+        guard let url = URL(string: "\(constants.baseURL)/3/discover/tv?api_key=\(constants.API_KEY)&language=en-US&sort_by=popularity.desc&page=1&timezone=America%2FNew_York&include_null_first_air_dates=false&with_watch_monetization_types=flatrate&with_status=0&with_type=0") else { return }
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            do {
+                let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
+                completion(.success(results.results))
+            } catch{
+                print(APIError.failedToLoadData)
+            }
+        }
+        task.resume()
+    }
+    
+    func search(with query: String, completion: @escaping (Result<[Title], Error>) -> Void) {
+        guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
+        guard let url = URL(string: "\(constants.baseURL)/3/search/movie?api_key=\(constants.API_KEY)&query=\(query)") else {
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            do {
+                let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
+                completion(.success(results.results))
+            } catch{
+                print(APIError.failedToLoadData)
+            }
+        }
+        task.resume()
+    }
+    
 }
