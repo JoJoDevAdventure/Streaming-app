@@ -9,6 +9,8 @@ import UIKit
 
 class UpCommingViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var UpcomingTitles: [Title] = []
     
     private let tableView: UITableView = {
@@ -17,16 +19,32 @@ class UpCommingViewController: UIViewController {
         return tableView
     }()
     
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        setupNavBar()
+        setupSubViews()
+        setupTableView()
+        fetchUpcoming()
+    }
+    
+    // MARK: - Set up
+    
+    private func setupNavBar() {
         title = "Upcoming"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.tintColor = .label
+    }
+    
+    private func setupSubViews() {
         view.addSubview(tableView)
+    }
+    
+    private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        fetchUpComing()
     }
     
     override func viewDidLayoutSubviews() {
@@ -34,7 +52,9 @@ class UpCommingViewController: UIViewController {
         tableView.frame = view.bounds
     }
     
-    private func fetchUpComing() {
+    // MARK: - Functions
+    
+    private func fetchUpcoming() {
         APICaller.shared.getUpcomingMovies { [weak self] results in
             switch results {
             case .success(let titles):
@@ -50,6 +70,8 @@ class UpCommingViewController: UIViewController {
     
 }
 
+// MARK: - Extensions
+
 extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,6 +86,33 @@ extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let title = UpcomingTitles[indexPath.row]
+        guard let titleName = title.original_title ?? title.original_name else { return }
+        let titleOverview = title.overview ?? ""
+        print(title)
+        APICaller.shared.getMovie(with: titleName + " trailer") { results in
+            switch results {
+            case .success(let videoElement) :
+                DispatchQueue.main.async { [weak self] in
+                    let vc = TitlePreviewViewController()
+                    let model = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                    vc.configure(with: model)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error) :
+                DispatchQueue.main.async { [weak self] in
+                    let vc = TitlePreviewViewController()
+                    let model = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                    vc.configure(with: model)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+                print(error.localizedDescription)
+            }
+        }
     }
     
 }

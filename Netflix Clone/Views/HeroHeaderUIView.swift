@@ -9,6 +9,10 @@ import UIKit
 
 class HeroHeaderUIView: UIView {
     
+    // MARK: - Properties
+    
+    var currentTitle : Title?
+    
     private let downloadButton: UIButton = {
         let button = UIButton()
         button.setTitle("Download", for: .normal)
@@ -17,7 +21,7 @@ class HeroHeaderUIView: UIView {
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
-        
+        button.isUserInteractionEnabled = true
         return button
     }()
     
@@ -28,6 +32,7 @@ class HeroHeaderUIView: UIView {
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = true
         button.layer.cornerRadius = 5
         return button
     }()
@@ -36,17 +41,33 @@ class HeroHeaderUIView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "heroImage")
         return imageView
     }()
     
+    // MARK: - Life cycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(heroImageView)
+        setupSubviews()
         addGradient()
+        applyConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    // MARK: - Set up
+    
+    private func setupSubviews() {
         addSubview(playButton)
         addSubview(downloadButton)
-        applyConstraints()
+        addSubview(heroImageView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heroImageView.frame = bounds
     }
     
     private func applyConstraints() {
@@ -65,14 +86,7 @@ class HeroHeaderUIView: UIView {
         NSLayoutConstraint.activate(downloadButtonConstraints)
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heroImageView.frame = bounds
-    }
+    // MARK: - Functions
     
     private func addGradient() {
         let gradientLayer = CAGradientLayer()
@@ -84,6 +98,7 @@ class HeroHeaderUIView: UIView {
         layer.addSublayer(gradientLayer)
     }
     
+    //Configure Header
     public func configure(with model: String) {
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else { return }
         print("CHARGED")

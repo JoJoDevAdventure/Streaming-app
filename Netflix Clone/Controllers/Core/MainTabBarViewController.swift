@@ -8,10 +8,17 @@
 import UIKit
 
 class MainTabViewController: UITabBarController {
+    
+    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        setupNavigationControllers()
+    }
+    
+    // MARK: - Set up
+    
+    private func setupNavigationControllers() {
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: UpCommingViewController())
         let vc3 = UINavigationController(rootViewController: SearchViewController())

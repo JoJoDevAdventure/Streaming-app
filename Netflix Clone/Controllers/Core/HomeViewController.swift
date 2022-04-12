@@ -17,7 +17,10 @@ enum Sections: Int {
 
 class HomeViewController: UIViewController {
     
-    var titleSelected : Title?
+    // MARK: - Properties
+    
+    var trendTitles : Title?
+    var headerView : HeroHeaderUIView?
     
     let sectionTitles: [String] = ["Trending Movies", "Trending Tv", "Upcoming movies",  "Popular", "Top rated"]
     
@@ -27,29 +30,36 @@ class HomeViewController: UIViewController {
         return table
     }()
     
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        view.addSubview(homeFeedTable)
-        
+        setupSubViews()
+        setupTableView()
+        setupHeaderView()
+        setupNavBar()
+    }
+    
+
+    
+    // MARK: - Set up
+    
+    private func setupHeaderView() {
+        headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 450))
+        fetchHeader()
+        homeFeedTable.tableHeaderView = headerView
+    }
+    
+    private func setupTableView() {
         homeFeedTable.delegate = self
         homeFeedTable.dataSource = self
-        
-        fetchHeader()
-        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
-        guard let poster = titleSelected?.poster_path else { return }
-        headerView.configure(with: poster)
-        homeFeedTable.tableHeaderView = headerView
-        
-        configureNavBar()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        homeFeedTable.frame = view.bounds
+    private func setupSubViews() {
+        view.addSubview(homeFeedTable)
     }
     
-    private func configureNavBar() {
+    private func setupNavBar() {
         
         var image = UIImage(named: "netflixLogo")
         image = image?.withRenderingMode(.alwaysOriginal)
@@ -61,23 +71,32 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        homeFeedTable.frame = view.bounds
+    }
+    
+    // MARK: - Functions
+    
     private func fetchHeader() {
-        DispatchQueue.main.async {
-            APICaller.shared.getTopRated { Result in
-                switch Result {
-                case .success(let titles):
-                    let random = Int.random(in: 0..<titles.count)
-                    print(random)
-                    self.titleSelected = titles[random]
-                    print(self.titleSelected)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+        APICaller.shared.getTopRated { [weak self] Result in
+            switch Result {
+            case .success(let titles):
+                self?.trendTitles = titles.randomElement()
+                guard let poster = self?.trendTitles?.poster_path else { return }
+                guard let trendTitles = self?.trendTitles else { return }
+                self?.headerView?.currentTitle = trendTitles
+                self?.headerView?.configure(with: poster)
+                self?.headerView?.currentTitle = trendTitles
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }
 
 }
+
+// MARK: - Extensions
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -93,6 +112,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else {
             return UITableViewCell()
         }
+        cell.delegate = self
         switch indexPath.section {
             
         case Sections.TrendingMovies.rawValue :
@@ -184,8 +204,17 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let defaultOffset = view.safeAreaInsets.top
         let offset = scrollView.contentOffset.y+defaultOffset
-        
         navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0,-offset))
     }
     
+}
+
+extension HomeViewController: CollectionViewTableViewCellDelegate {
+    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(with: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }

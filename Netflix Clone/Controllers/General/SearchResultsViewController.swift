@@ -7,9 +7,19 @@
 
 import UIKit
 
+//MARK: - Protocols
+
+protocol SearchResultsViewControllerDelegate: AnyObject {
+    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel)
+}
+
 class SearchResultsViewController: UIViewController {
     
+    // MARK: - Properties
+    
     public var titles : [Title] = []
+    
+    public weak var delegate: SearchResultsViewControllerDelegate?
     
     public let seachResultsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -20,13 +30,28 @@ class SearchResultsViewController: UIViewController {
         return collectionView
     }()
 
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubview(seachResultsCollectionView)
-        
+        setupSubViews()
+        setupCollectionView()
+        setupNavBar()
+    }
+    
+    // MARK: - Set up
+    
+    private func setupNavBar() {
+        navigationController?.navigationBar.tintColor = .label
+    }
+    
+    private func setupCollectionView () {
         seachResultsCollectionView.delegate = self
         seachResultsCollectionView.dataSource = self
+    }
+    
+    private func setupSubViews() {
+        view.addSubview(seachResultsCollectionView)
     }
     
     override func viewDidLayoutSubviews() {
@@ -36,6 +61,8 @@ class SearchResultsViewController: UIViewController {
 
 }
 
+// MARK: - Extensions
+
 extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return titles.count
@@ -44,14 +71,27 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = seachResultsCollectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as? TitleCollectionViewCell else { return UICollectionViewCell() }
         let title = titles[indexPath.row]
-        let spinner = UIActivityIndicatorView()
-        spinner.style = .medium
-        cell.contentView.addSubview(spinner)
-        spinner.frame = cell.contentView.bounds
         cell.backgroundColor = .tertiaryLabel
-        spinner.startAnimating()
         cell.configure(with: title.poster_path ?? "")
-        spinner.stopAnimating()
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let title = titles[indexPath.row]
+        guard let titleName = title.original_name ?? title.original_title else { return }
+        guard let titleOverview = title.overview else { return }
+        APICaller.shared.getMovie(with: titleName + " trailer") {[weak self] results in
+            switch results {
+            case .success(let videoElement) :
+                let model = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                self?.delegate?.searchResultsViewControllerDidTapItem(model)
+            case .failure(let error) :
+                let model = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                self?.delegate?.searchResultsViewControllerDidTapItem(model)
+                print(error)
+            }
+        }
+    }
+    
 }

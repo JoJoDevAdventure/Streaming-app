@@ -9,6 +9,8 @@ import UIKit
 
 class TitleTableViewCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let identifier = "TitleTableViewCell"
     
     private let upcomingPoster: UIImageView = {
@@ -35,12 +37,12 @@ class TitleTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    // MARK: - Life cycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(upcomingPoster)
-        addSubview(movieLabel)
-        addSubview(playButton)
+        setupSubViews()
         applyConstraints()
     }
     
@@ -48,6 +50,15 @@ class TitleTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
+    // MARK: - Set up
+    
+    private func setupSubViews() {
+        addSubview(upcomingPoster)
+        addSubview(movieLabel)
+        addSubview(playButton)
+    }
+    
+    //Constraints
     private func applyConstraints() {
         let imageConstraints = [
             upcomingPoster.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
@@ -72,6 +83,8 @@ class TitleTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(labelConstraints)
         NSLayoutConstraint.activate(buttonConstriants)
     }
+    
+    // MARK: - Functions
     
     public func configure(with model : TitleViewModel) {
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else { return }
