@@ -1,6 +1,6 @@
 HELLO
 
-I just done a netflix clone !
+I just did a netflix clone !
 
 ![Simulator Screen Shot - iPhone 11 - 2022-04-13 at 08 02 10](https://user-images.githubusercontent.com/89042174/163127260-1b7487e0-7749-4a49-8aba-34ca05d9a71f.png)![Simulator Screen Shot - iPhone 11 - 2022-04-13 at 08 02 17](https://user-images.githubusercontent.com/89042174/163127333-8b69f998-5cb3-4c82-8627-76a910530b60.png)
 ![Simulator Screen Shot - iPhone 11 - 2022-04-13 at 08 02 25](https://user-images.githubusercontent.com/89042174/163127374-afa83832-3929-4447-aee0-0245d3dcc1bd.png)
