@@ -108,7 +108,6 @@ class HeroHeaderUIView: UIView {
     //Configure Header
     public func configure(with model: String) {
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else { return }
-        print("CHARGED")
         heroImageView.sd_setImage(with: url, completed: nil)
     }
     

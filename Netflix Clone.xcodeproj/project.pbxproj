@@ -33,10 +33,57 @@
 		A3DF161F2806348E00A53F4D /* TitleDownloadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF161E2806348E00A53F4D /* TitleDownloadTableViewCell.swift */; };
 		A3DF1624280637FC00A53F4D /* download.json in Resources */ = {isa = PBXBuildFile; fileRef = A3DF1623280637FC00A53F4D /* download.json */; };
 		A3DF162828063C0600A53F4D /* done.json in Resources */ = {isa = PBXBuildFile; fileRef = A3DF162728063C0600A53F4D /* done.json */; };
+		A3DF162A28065F8000A53F4D /* WatchStreamingUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF162928065F8000A53F4D /* WatchStreamingUIViewController.swift */; };
+		A3DF162C28067D6E00A53F4D /* AlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF162B28067D6E00A53F4D /* AlertsManager.swift */; };
+		A3DF163628068B5A00A53F4D /* StreamingKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = A3DF163528068B5A00A53F4D /* StreamingKit.docc */; };
+		A3DF163C28068B5A00A53F4D /* StreamingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; };
+		A3DF164328068B5A00A53F4D /* StreamingKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF164228068B5A00A53F4D /* StreamingKitTests.swift */; };
+		A3DF164428068B5A00A53F4D /* StreamingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A3DF163428068B5A00A53F4D /* StreamingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A3DF164728068B5A00A53F4D /* StreamingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; };
+		A3DF164828068B5A00A53F4D /* StreamingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A3DF165128068B9A00A53F4D /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF165028068B9900A53F4D /* VideoPlayer.swift */; };
 		A3FB047127FDFC91003E7EE1 /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FB047027FDFC90003E7EE1 /* TitleTableViewCell.swift */; };
 		A3FB047327FE50F2003E7EE1 /* TitleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FB047227FE50F2003E7EE1 /* TitleViewModel.swift */; };
 		A3FB047527FE9150003E7EE1 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FB047427FE9150003E7EE1 /* SearchResultsViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A3DF163D28068B5A00A53F4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A300352427FBC5810019A052 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3DF163128068B5A00A53F4D;
+			remoteInfo = StreamingKit;
+		};
+		A3DF163F28068B5A00A53F4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A300352427FBC5810019A052 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A300352B27FBC5810019A052;
+			remoteInfo = "Netflix Clone";
+		};
+		A3DF164528068B5A00A53F4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A300352427FBC5810019A052 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3DF163128068B5A00A53F4D;
+			remoteInfo = StreamingKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A3DF164C28068B5A00A53F4D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A3DF164828068B5A00A53F4D /* StreamingKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A300352C27FBC5810019A052 /* Netflix Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Netflix Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +111,14 @@
 		A3DF161E2806348E00A53F4D /* TitleDownloadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDownloadTableViewCell.swift; sourceTree = "<group>"; };
 		A3DF1623280637FC00A53F4D /* download.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = download.json; sourceTree = "<group>"; };
 		A3DF162728063C0600A53F4D /* done.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = done.json; sourceTree = "<group>"; };
+		A3DF162928065F8000A53F4D /* WatchStreamingUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchStreamingUIViewController.swift; sourceTree = "<group>"; };
+		A3DF162B28067D6E00A53F4D /* AlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsManager.swift; sourceTree = "<group>"; };
+		A3DF163228068B5A00A53F4D /* StreamingKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StreamingKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3DF163428068B5A00A53F4D /* StreamingKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamingKit.h; sourceTree = "<group>"; };
+		A3DF163528068B5A00A53F4D /* StreamingKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StreamingKit.docc; sourceTree = "<group>"; };
+		A3DF163B28068B5A00A53F4D /* StreamingKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StreamingKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3DF164228068B5A00A53F4D /* StreamingKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingKitTests.swift; sourceTree = "<group>"; };
+		A3DF165028068B9900A53F4D /* VideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		A3FB047027FDFC90003E7EE1 /* TitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTableViewCell.swift; sourceTree = "<group>"; };
 		A3FB047227FE50F2003E7EE1 /* TitleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleViewModel.swift; sourceTree = "<group>"; };
 		A3FB047427FE9150003E7EE1 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
@@ -74,9 +129,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3DF164728068B5A00A53F4D /* StreamingKit.framework in Frameworks */,
 				A3C174F727FD2E0F0014EB5A /* SDWebImageMapKit in Frameworks */,
 				A3C174F527FD2E0F0014EB5A /* SDWebImage in Frameworks */,
 				A3DF161D280633AF00A53F4D /* Lottie in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3DF162F28068B5A00A53F4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3DF163828068B5A00A53F4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF163C28068B5A00A53F4D /* StreamingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				A300352E27FBC5810019A052 /* Netflix Clone */,
+				A3DF163328068B5A00A53F4D /* StreamingKit */,
+				A3DF164128068B5A00A53F4D /* StreamingKitTests */,
 				A300352D27FBC5810019A052 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,6 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				A300352C27FBC5810019A052 /* Netflix Clone.app */,
+				A3DF163228068B5A00A53F4D /* StreamingKit.framework */,
+				A3DF163B28068B5A00A53F4D /* StreamingKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,8 +180,8 @@
 				A300355127FBDCDE0019A052 /* Managers */,
 				A300355027FBDCD50019A052 /* Resources */,
 				A300354F27FBDC680019A052 /* Models */,
-				A300354E27FBDC480019A052 /* ViewModels */,
 				A300354C27FBDC380019A052 /* Views */,
+				A300354E27FBDC480019A052 /* ViewModels */,
 				A300354327FBD0F90019A052 /* Controllers */,
 				A300353827FBC5820019A052 /* Assets.xcassets */,
 				A300353A27FBC5820019A052 /* LaunchScreen.storyboard */,
@@ -171,6 +246,7 @@
 			children = (
 				A300355627FC2B040019A052 /* APICaller.swift */,
 				A30267462803B9E4008155B0 /* DataPersistantManager.swift */,
+				A3DF162B28067D6E00A53F4D /* AlertsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -182,6 +258,24 @@
 				A3DF1623280637FC00A53F4D /* download.json */,
 			);
 			path = "Animation JSON";
+			sourceTree = "<group>";
+		};
+		A3DF163328068B5A00A53F4D /* StreamingKit */ = {
+			isa = PBXGroup;
+			children = (
+				A3DF163428068B5A00A53F4D /* StreamingKit.h */,
+				A3DF163528068B5A00A53F4D /* StreamingKit.docc */,
+				A3DF165028068B9900A53F4D /* VideoPlayer.swift */,
+			);
+			path = StreamingKit;
+			sourceTree = "<group>";
+		};
+		A3DF164128068B5A00A53F4D /* StreamingKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				A3DF164228068B5A00A53F4D /* StreamingKitTests.swift */,
+			);
+			path = StreamingKitTests;
 			sourceTree = "<group>";
 		};
 		A3FB047627FE915C003E7EE1 /* Core */ = {
@@ -201,11 +295,23 @@
 			children = (
 				A3FB047427FE9150003E7EE1 /* SearchResultsViewController.swift */,
 				A31D31262803413900E17D72 /* TitlePreviewViewController.swift */,
+				A3DF162928065F8000A53F4D /* WatchStreamingUIViewController.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A3DF162D28068B5A00A53F4D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF164428068B5A00A53F4D /* StreamingKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		A300352B27FBC5810019A052 /* Netflix Clone */ = {
@@ -215,10 +321,12 @@
 				A300352827FBC5810019A052 /* Sources */,
 				A300352927FBC5810019A052 /* Frameworks */,
 				A300352A27FBC5810019A052 /* Resources */,
+				A3DF164C28068B5A00A53F4D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A3DF164628068B5A00A53F4D /* PBXTargetDependency */,
 			);
 			name = "Netflix Clone";
 			packageProductDependencies = (
@@ -229,6 +337,43 @@
 			productName = "Netflix Clone";
 			productReference = A300352C27FBC5810019A052 /* Netflix Clone.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A3DF163128068B5A00A53F4D /* StreamingKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3DF164928068B5A00A53F4D /* Build configuration list for PBXNativeTarget "StreamingKit" */;
+			buildPhases = (
+				A3DF162D28068B5A00A53F4D /* Headers */,
+				A3DF162E28068B5A00A53F4D /* Sources */,
+				A3DF162F28068B5A00A53F4D /* Frameworks */,
+				A3DF163028068B5A00A53F4D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StreamingKit;
+			productName = StreamingKit;
+			productReference = A3DF163228068B5A00A53F4D /* StreamingKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A3DF163A28068B5A00A53F4D /* StreamingKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3DF164D28068B5A00A53F4D /* Build configuration list for PBXNativeTarget "StreamingKitTests" */;
+			buildPhases = (
+				A3DF163728068B5A00A53F4D /* Sources */,
+				A3DF163828068B5A00A53F4D /* Frameworks */,
+				A3DF163928068B5A00A53F4D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3DF163E28068B5A00A53F4D /* PBXTargetDependency */,
+				A3DF164028068B5A00A53F4D /* PBXTargetDependency */,
+			);
+			name = StreamingKitTests;
+			productName = StreamingKitTests;
+			productReference = A3DF163B28068B5A00A53F4D /* StreamingKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -242,6 +387,13 @@
 				TargetAttributes = {
 					A300352B27FBC5810019A052 = {
 						CreatedOnToolsVersion = 13.2.1;
+					};
+					A3DF163128068B5A00A53F4D = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+					A3DF163A28068B5A00A53F4D = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = A300352B27FBC5810019A052;
 					};
 				};
 			};
@@ -263,6 +415,8 @@
 			projectRoot = "";
 			targets = (
 				A300352B27FBC5810019A052 /* Netflix Clone */,
+				A3DF163128068B5A00A53F4D /* StreamingKit */,
+				A3DF163A28068B5A00A53F4D /* StreamingKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -279,6 +433,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A3DF163028068B5A00A53F4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3DF163928068B5A00A53F4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -291,6 +459,7 @@
 				A300353427FBC5810019A052 /* MainTabBarViewController.swift in Sources */,
 				A3FB047127FDFC91003E7EE1 /* TitleTableViewCell.swift in Sources */,
 				A300355327FBDD050019A052 /* CollectionViewTableViewCell.swift in Sources */,
+				A3DF162A28065F8000A53F4D /* WatchStreamingUIViewController.swift in Sources */,
 				A300355727FC2B040019A052 /* APICaller.swift in Sources */,
 				A3DF161F2806348E00A53F4D /* TitleDownloadTableViewCell.swift in Sources */,
 				A31D314F2803B0AD00E17D72 /* NetflixCloneModel.xcdatamodeld in Sources */,
@@ -305,13 +474,49 @@
 				A31D3129280345C100E17D72 /* TitlePreviewViewModel.swift in Sources */,
 				A300353227FBC5810019A052 /* SceneDelegate.swift in Sources */,
 				A31D31272803413900E17D72 /* TitlePreviewViewController.swift in Sources */,
+				A3DF162C28067D6E00A53F4D /* AlertsManager.swift in Sources */,
 				A3C174F027FD0ADB0014EB5A /* Titles.swift in Sources */,
 				A300354527FBD1170019A052 /* HomeViewController.swift in Sources */,
 				A3FB047327FE50F2003E7EE1 /* TitleViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A3DF162E28068B5A00A53F4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF165128068B9A00A53F4D /* VideoPlayer.swift in Sources */,
+				A3DF163628068B5A00A53F4D /* StreamingKit.docc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3DF163728068B5A00A53F4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF164328068B5A00A53F4D /* StreamingKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A3DF163E28068B5A00A53F4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3DF163128068B5A00A53F4D /* StreamingKit */;
+			targetProxy = A3DF163D28068B5A00A53F4D /* PBXContainerItemProxy */;
+		};
+		A3DF164028068B5A00A53F4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A300352B27FBC5810019A052 /* Netflix Clone */;
+			targetProxy = A3DF163F28068B5A00A53F4D /* PBXContainerItemProxy */;
+		};
+		A3DF164628068B5A00A53F4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3DF163128068B5A00A53F4D /* StreamingKit */;
+			targetProxy = A3DF164528068B5A00A53F4D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		A300353A27FBC5820019A052 /* LaunchScreen.storyboard */ = {
@@ -444,6 +649,7 @@
 		A300354127FBC5820019A052 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -471,6 +677,7 @@
 		A300354227FBC5820019A052 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -495,6 +702,102 @@
 			};
 			name = Release;
 		};
+		A3DF164A28068B5A00A53F4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = X7FBND7W68;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Joseph.StreamingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A3DF164B28068B5A00A53F4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = X7FBND7W68;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Joseph.StreamingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A3DF164E28068B5A00A53F4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X7FBND7W68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Joseph.StreamingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Netflix Clone.app/Netflix Clone";
+			};
+			name = Debug;
+		};
+		A3DF164F28068B5A00A53F4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X7FBND7W68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Joseph.StreamingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Netflix Clone.app/Netflix Clone";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -512,6 +815,24 @@
 			buildConfigurations = (
 				A300354127FBC5820019A052 /* Debug */,
 				A300354227FBC5820019A052 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3DF164928068B5A00A53F4D /* Build configuration list for PBXNativeTarget "StreamingKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3DF164A28068B5A00A53F4D /* Debug */,
+				A3DF164B28068B5A00A53F4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3DF164D28068B5A00A53F4D /* Build configuration list for PBXNativeTarget "StreamingKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3DF164E28068B5A00A53F4D /* Debug */,
+				A3DF164F28068B5A00A53F4D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

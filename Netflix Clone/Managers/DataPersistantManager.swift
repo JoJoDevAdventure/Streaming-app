@@ -11,11 +11,7 @@ import CoreData
 
 class DataPersistantManager {
     
-    enum DataBaseError: Error {
-        case failedToSaveData
-        case failedToFetchData
-        case failedToDelete
-    }
+    
     
     static let shared = DataPersistantManager()
     
@@ -80,6 +76,45 @@ class DataPersistantManager {
             
         } catch {
             completion(.failure(DataBaseError.failedToDelete))
+        }
+    }
+    
+    func deleteAllTitles(items: [TitleItem],completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        
+        for item in items {
+            context.delete(item)
+        }
+        
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DataBaseError.failedToDelete))
+        }
+        
+    }
+    
+}
+
+extension DataPersistantManager {
+    
+    enum DataBaseError: LocalizedError {
+        case failedToSaveData
+        case failedToFetchData
+        case failedToDelete
+        
+        var errorDescription: String? {
+            switch self {
+            case.failedToDelete :
+                return "Failed to remove title"
+            case.failedToSaveData :
+                return "Failed to save title"
+            case.failedToFetchData :
+                return "Failed to fetch titles"
+            }
         }
     }
     

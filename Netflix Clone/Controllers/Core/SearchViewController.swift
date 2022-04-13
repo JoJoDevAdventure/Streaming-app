@@ -13,6 +13,8 @@ class SearchViewController: UIViewController {
     
     private var titles: [Title] = []
     
+
+    
     private let discoverTable: UITableView = {
         let table = UITableView()
         table.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
@@ -73,7 +75,7 @@ class SearchViewController: UIViewController {
                     self?.discoverTable.reloadData()
                 }
             case .failure(let error) :
-                print(error.localizedDescription)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
     }
@@ -105,7 +107,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 //SearchView Extension
 extension SearchViewController: UISearchResultsUpdating, SearchResultsViewControllerDelegate {
     
-    func updateSearchResults(for searchController: UISearchController) {
+        func updateSearchResults(for searchController: UISearchController) {
         let searchbar = searchController.searchBar
         guard let query = searchbar.text,
                   !query.trimmingCharacters(in: .whitespaces).isEmpty,
@@ -121,7 +123,7 @@ extension SearchViewController: UISearchResultsUpdating, SearchResultsViewContro
                     resultsController.titles = titles
                     resultsController.seachResultsCollectionView.reloadData()
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             }
         }
@@ -150,19 +152,19 @@ extension SearchViewController: UISearchResultsUpdating, SearchResultsViewContro
                         vc.configure(with: model)
                         self?.navigationController?.pushViewController(vc, animated: true)
                     }
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
             }
         }
     }
     
-    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel) {
+    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel, title: Title) {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
             vc.configure(with: viewModel)
+            vc.currentTitle = title
             self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
 }
 
 

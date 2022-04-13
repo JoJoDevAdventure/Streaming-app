@@ -75,6 +75,9 @@ class TitlePreviewViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
+        button.addAction(UIAction(handler: {action in
+            NotificationCenter.default.post(name: NSNotification.Name("PressedPlay"), object: nil)
+        }), for: .touchUpInside)
         return button
     }()
     
@@ -214,6 +217,9 @@ class TitlePreviewViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("PressedDownload"), object: nil, queue: nil) {[weak self] _ in
             self?.downloadTitle()
         }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("PressedPlay"), object: nil, queue: nil) {[weak self] _ in
+            self?.playTitle()
+        }
     }
     
     private func setupDownloadAnimation() {
@@ -234,7 +240,6 @@ class TitlePreviewViewController: UIViewController {
         overViewLabel.text = model.titleOverview
         //WebView
         if model.youtubeView != nil {
-            print("waiting")
             let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView!.id.videoId)")
             webView.load(URLRequest(url: url!))
         }
@@ -261,9 +266,18 @@ class TitlePreviewViewController: UIViewController {
                 NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
                 self?.playDoneDownloadAnimation()
             case .failure(let error) :
-                print(error)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
+    }
+    
+    private func playTitle() {
+        guard let currentTitle = currentTitle else {
+            return
+        }
+        let vc = WatchStreamingUIViewController()
+        vc.fetchWebView(with: currentTitle.id)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func playDoneDownloadAnimation() {
@@ -273,8 +287,6 @@ class TitlePreviewViewController: UIViewController {
         doneDownloadAnimation.play {[weak self] done in
             if done {
                 self?.doneDownloadAnimation.isHidden = true
-            }else {
-                
             }
         }
     }

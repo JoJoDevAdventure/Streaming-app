@@ -46,6 +46,7 @@ class TitleDownloadTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupSubViews()
         applyConstraints()
+        setupObservers()
     }
     
     required init?(coder: NSCoder) {
@@ -85,6 +86,12 @@ class TitleDownloadTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(imageConstraints)
         NSLayoutConstraint.activate(labelConstraints)
         NSLayoutConstraint.activate(downloadAnimationConstriants)
+    }
+    
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("DownloadedItemFromHome"), object: nil, queue: nil ) { _ in
+            self.DownloadAnimation.play()
+        }
     }
     
     // MARK: - Functions

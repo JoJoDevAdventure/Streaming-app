@@ -37,6 +37,13 @@ class DownloadsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.tintColor = .label
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete all", image: UIImage(systemName: "trash"), primaryAction: UIAction(handler: { _ in
+            AlertsManager.shared.verificationAlert(with: self, sure: "remove all downloads?") {[weak self] confirm in
+                if confirm {
+                    self?.deleteAllLocalStorageForDownload()
+                }
+            }
+        }), menu: nil)
     }
     
     private func setupSubViews() {
@@ -70,7 +77,21 @@ class DownloadsViewController: UIViewController {
                     self?.tableView.reloadData()
                 }
             case.failure(let error) :
-                print(error)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
+            }
+        }
+    }
+    
+    private func deleteAllLocalStorageForDownload() {
+        DataPersistantManager.shared.deleteAllTitles(items: titles) {[weak self] results in
+            switch results {
+            case .success() :
+                self?.titles.removeAll()
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error) :
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
     }
@@ -111,7 +132,7 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
                     self?.navigationController?.pushViewController(vc, animated: true)
                 }
             case .failure(let error) :
-                print(error.localizedDescription)
+                AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
             }
         }
     }
@@ -125,7 +146,7 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
                     self?.titles.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .fade)
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
                 }
             }
         default:

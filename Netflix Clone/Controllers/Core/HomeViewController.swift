@@ -97,12 +97,13 @@ class HomeViewController: UIViewController {
                         vc.configure(with: viewModel)
                         self?.navigationController?.pushViewController(vc, animated: true)
                     }
-                case .failure(_):
+                case .failure(let error):
                     let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: self?.trendHeaderTitle?.release_date, voteCount: self?.trendHeaderTitle?.vote_count, voteAverge: self?.trendHeaderTitle?.vote_average)
                     DispatchQueue.main.async { [weak self] in
                         let vc = TitlePreviewViewController()
                         vc.configure(with: viewModel)
                         self?.navigationController?.pushViewController(vc, animated: true)
+                        AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
                     }
                 }
             }
@@ -118,7 +119,7 @@ class HomeViewController: UIViewController {
                     NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
                     self?.playDoneDownloadAnimation()
                 case .failure(let error):
-                    print(error)
+                    AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
                 }
             }
         }
@@ -144,7 +145,7 @@ class HomeViewController: UIViewController {
                 self?.headerView?.currentTitle = trendTitles
                 self?.headerView?.configure(with: poster)
             case .failure(let error):
-                print(error.localizedDescription)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
     }
@@ -156,8 +157,6 @@ class HomeViewController: UIViewController {
         doneDownloadAnimation.play {[weak self] done in
             if done {
                 self?.doneDownloadAnimation.isHidden = true
-            }else {
-                
             }
         }
     }
@@ -190,7 +189,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success(let titles) :
                     cell.configure(with: titles)
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             
             }
@@ -202,7 +201,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success(let titles) :
                     cell.configure(with: titles)
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             
             }
@@ -214,7 +213,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success(let titles) :
                     cell.configure(with: titles)
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             
             }
@@ -226,7 +225,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success(let titles) :
                     cell.configure(with: titles)
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             
             }
@@ -238,7 +237,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success(let titles) :
                     cell.configure(with: titles)
                 case .failure(let error) :
-                    print(error.localizedDescription)
+                    AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
                 }
             
             }
@@ -278,16 +277,19 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HomeViewController: CollectionViewTableViewCellDelegate {
-    func CollectionViewTableViewCellFinishedDownload() {
-        playDoneDownloadAnimation()
-    }
-    
-    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel, title: Title) {
+    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel, title: Title, error: Error?) {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
             vc.currentTitle = title
             vc.configure(with: viewModel)
             self?.navigationController?.pushViewController(vc, animated: true)
+            if error != nil {
+                AlertsManager.shared.errorAlert(with: self!, error: error!.localizedDescription)
+            }
         }
+    }
+    
+    func CollectionViewTableViewCellFinishedDownload() {
+        playDoneDownloadAnimation()
     }
 }

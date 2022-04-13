@@ -63,7 +63,7 @@ class UpCommingViewController: UIViewController {
                     self?.tableView.reloadData()
                 }
             case.failure(let error):
-                print(error.localizedDescription)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
     }
@@ -93,7 +93,6 @@ extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
         let title = UpcomingTitles[indexPath.row]
         guard let titleName = title.original_title ?? title.original_name else { return }
         let titleOverview = title.overview ?? ""
-        print(title)
         APICaller.shared.getMovie(with: titleName + " trailer") { results in
             switch results {
             case .success(let videoElement) :
@@ -112,7 +111,7 @@ extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
                     vc.configure(with: model)
                     self?.navigationController?.pushViewController(vc, animated: true)
                 }
-                print(error.localizedDescription)
+                AlertsManager.shared.errorAlert(with: self, error: error.localizedDescription)
             }
         }
     }

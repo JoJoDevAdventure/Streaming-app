@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import Lottie
 
 //MARK: - Protocols
 
 protocol SearchResultsViewControllerDelegate: AnyObject {
-    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel)
+    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel, title : Title)
 }
 
 class SearchResultsViewController: UIViewController {
@@ -18,6 +19,8 @@ class SearchResultsViewController: UIViewController {
     // MARK: - Properties
     
     public var titles : [Title] = []
+    
+    let doneDownloadAnimation = AnimationView()
     
     public weak var delegate: SearchResultsViewControllerDelegate?
     
@@ -37,6 +40,7 @@ class SearchResultsViewController: UIViewController {
         setupSubViews()
         setupCollectionView()
         setupNavBar()
+        setupDownloadAnimation()
     }
     
     // MARK: - Set up
@@ -52,11 +56,50 @@ class SearchResultsViewController: UIViewController {
     
     private func setupSubViews() {
         view.addSubview(seachResultsCollectionView)
+        view.addSubview(doneDownloadAnimation)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         seachResultsCollectionView.frame = view.bounds
+    }
+    
+    
+    private func setupDownloadAnimation() {
+        doneDownloadAnimation.animation = Animation.named("done")
+        doneDownloadAnimation.contentMode = .scaleAspectFit
+        doneDownloadAnimation.loopMode = .playOnce
+        doneDownloadAnimation.frame = view.bounds
+        doneDownloadAnimation.isHidden = true
+    }
+    
+    // MARK: - Functions
+    
+    
+    private func downloadTitleAt(_ indexPath : IndexPath) {
+        let title = titles[indexPath.row]
+        DataPersistantManager.shared.downloadTitleWith(model: title) {[weak self] result in
+            switch result {
+            case .success() :
+                NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
+                self?.playDoneDownloadAnimation()
+            case .failure(let error) :
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
+            }
+        }
+    }
+    
+    private func playDoneDownloadAnimation() {
+        doneDownloadAnimation.isHidden = false
+        let focus = UIFocusEffect()
+        doneDownloadAnimation.focusEffect = .some(focus)
+        doneDownloadAnimation.play {[weak self] done in
+            if done {
+                self?.doneDownloadAnimation.isHidden = true
+            }else {
+                
+            }
+        }
     }
 
 }
@@ -85,13 +128,47 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
             switch results {
             case .success(let videoElement) :
                 let model = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
-                self?.delegate?.searchResultsViewControllerDidTapItem(model)
+                self?.delegate?.searchResultsViewControllerDidTapItem(model, title: title)
             case .failure(let error) :
                 let model = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
-                self?.delegate?.searchResultsViewControllerDidTapItem(model)
-                print(error)
+                self?.delegate?.searchResultsViewControllerDidTapItem(model, title: title)
+                AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
             }
         }
+    }
+    
+    //Hold pressing cell :
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let config = UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil) {[weak self] _ in
+                let downloadAction = UIAction(title: "download", image: UIImage(systemName: "arrow.down.to.line"), identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
+                    self?.downloadTitleAt(indexPath)
+                }
+                
+                let seeMoreAction = UIAction(title: "See mote", image: UIImage(systemName: "eye"), identifier: nil, discoverabilityTitle: nil, state: .off) {[weak self] _ in
+                    guard let title = self?.titles[indexPath.row] else {return}
+                    guard let titleName = title.original_title ?? title.original_name else {
+                        return
+                    }
+                    guard let titleOverview = title.overview else {return }
+                    APICaller.shared.getMovie(with: titleName + " trailer") { [weak self] results in
+                        switch results {
+                        case . success(let videoElement) :
+                            guard let titleOverview = title.overview else { return }
+                            let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                            self?.delegate?.searchResultsViewControllerDidTapItem(viewModel, title: title)
+                        case .failure(let error):
+                            let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
+                            self?.delegate?.searchResultsViewControllerDidTapItem(viewModel, title: title)
+                            AlertsManager.shared.errorAlert(with: self!, error: error.localizedDescription)
+                        }
+                    }
+                }
+                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction, seeMoreAction])
+        }
+        return config
     }
     
 }
