@@ -16,24 +16,28 @@ class HeroHeaderUIView: UIView {
     private let downloadButton: UIButton = {
         let button = UIButton()
         button.setTitle("Download", for: .normal)
-        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.7)
+        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.8)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
-        button.isUserInteractionEnabled = true
+        button.addAction(UIAction(handler: { _ in
+            NotificationCenter.default.post(name: NSNotification.Name("DownloadedFromHeader"), object: nil)
+        }), for: .touchUpInside)
         return button
     }()
     
     private let playButton: UIButton = {
         let button = UIButton()
         button.setTitle("Play", for: .normal)
-        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.7)
+        button.backgroundColor = UIColor.init(red: 229/255, green: 9/255, blue: 20/255, alpha: 0.8)
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.isUserInteractionEnabled = true
         button.layer.cornerRadius = 5
+        button.addAction(UIAction(handler: { _ in
+            NotificationCenter.default.post(name: NSNotification.Name("PlayFromHeader"), object: nil)
+        }), for: .touchUpInside)
         return button
     }()
     
@@ -49,7 +53,6 @@ class HeroHeaderUIView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
-        addGradient()
         applyConstraints()
     }
     
@@ -60,9 +63,10 @@ class HeroHeaderUIView: UIView {
     // MARK: - Set up
     
     private func setupSubviews() {
+        addSubview(heroImageView)
+        addGradient()
         addSubview(playButton)
         addSubview(downloadButton)
-        addSubview(heroImageView)
     }
     
     override func layoutSubviews() {
@@ -71,16 +75,19 @@ class HeroHeaderUIView: UIView {
     }
     
     private func applyConstraints() {
+        
         let playButtonConstraints = [
             playButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 70),
             playButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-            playButton.widthAnchor.constraint(equalToConstant: 120)
+            playButton.widthAnchor.constraint(equalToConstant: 120),
+            playButton.heightAnchor.constraint(equalToConstant: 40)
         ]
         
         let downloadButtonConstraints = [
             downloadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -70),
             downloadButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-            downloadButton.widthAnchor.constraint(equalToConstant: 120)
+            downloadButton.widthAnchor.constraint(equalToConstant: 120),
+            downloadButton.heightAnchor.constraint(equalToConstant: 40)
         ]
         NSLayoutConstraint.activate(playButtonConstraints)
         NSLayoutConstraint.activate(downloadButtonConstraints)

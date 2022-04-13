@@ -7,13 +7,18 @@
 
 import UIKit
 import WebKit
+import Lottie
 
 class TitlePreviewViewController: UIViewController {
     
     // MARK: - Properties
     
+    var currentTitle : Title?
+    
     var positifNote: Double = 0
     var negatifNote: Double = 0
+    
+    let doneDownloadAnimation = AnimationView()
     
     private let webView: WKWebView = {
         let webView = WKWebView()
@@ -26,6 +31,7 @@ class TitlePreviewViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.text = "Harry Potter"
+        label.numberOfLines = 0
         return label
     }()
     
@@ -47,7 +53,7 @@ class TitlePreviewViewController: UIViewController {
         return label
     }()
     
-    private let downloadBtn : UIButton = {
+    let downloadBtn : UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("download", for: .normal)
@@ -55,6 +61,9 @@ class TitlePreviewViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
+        button.addAction(UIAction(handler: {action in
+            NotificationCenter.default.post(name: NSNotification.Name("PressedDownload"), object: nil)
+        }), for: .touchUpInside)
         return button
     }()
     
@@ -105,6 +114,8 @@ class TitlePreviewViewController: UIViewController {
         super.viewDidLoad()
         setupSubViews()
         configureConstraints()
+        setupObservers()
+        setupDownloadAnimation()
     }
     
     // MARK: - Set up
@@ -120,6 +131,7 @@ class TitlePreviewViewController: UIViewController {
         view.addSubview(positifGreenView)
         view.addSubview(negatifRedView)
         view.addSubview(pourcentageLikeLabel)
+        view.addSubview(doneDownloadAnimation)
     }
     
     private func configureConstraints() {
@@ -132,7 +144,8 @@ class TitlePreviewViewController: UIViewController {
         
         let titleLabelConstraints = [
             titleLabel.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant : -10)
         ]
         
         let releaseDateLabeLConstraints = [
@@ -144,7 +157,7 @@ class TitlePreviewViewController: UIViewController {
             overViewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
             overViewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             overViewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant : -10),
-            overViewLabel.heightAnchor.constraint(equalToConstant:150)
+            overViewLabel.heightAnchor.constraint(equalToConstant:160)
         ]
         
         let buttonConstraints = [
@@ -197,6 +210,20 @@ class TitlePreviewViewController: UIViewController {
         NSLayoutConstraint.activate(pourcentageLikeLabelConstraints)
     }
     
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("PressedDownload"), object: nil, queue: nil) {[weak self] _ in
+            self?.downloadTitle()
+        }
+    }
+    
+    private func setupDownloadAnimation() {
+        doneDownloadAnimation.animation = Animation.named("done")
+        doneDownloadAnimation.contentMode = .scaleAspectFit
+        doneDownloadAnimation.loopMode = .playOnce
+        doneDownloadAnimation.frame = view.bounds
+        doneDownloadAnimation.isHidden = true
+    }
+    
     // MARK: - Functions
     
     //Configure
@@ -224,5 +251,32 @@ class TitlePreviewViewController: UIViewController {
         pourcentageLikeLabel.text = "\(positifNote*10)%"
     }
     
+    private func downloadTitle() {
+        guard let currentTitle = currentTitle else {
+            return
+        }
+        DataPersistantManager.shared.downloadTitleWith(model: currentTitle) {[weak self] results in
+            switch results {
+            case .success() :
+                NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
+                self?.playDoneDownloadAnimation()
+            case .failure(let error) :
+                print(error)
+            }
+        }
+    }
+    
+    private func playDoneDownloadAnimation() {
+        doneDownloadAnimation.isHidden = false
+        let focus = UIFocusEffect()
+        doneDownloadAnimation.focusEffect = .some(focus)
+        doneDownloadAnimation.play {[weak self] done in
+            if done {
+                self?.doneDownloadAnimation.isHidden = true
+            }else {
+                
+            }
+        }
+    }
     
 }

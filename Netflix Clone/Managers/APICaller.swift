@@ -25,7 +25,7 @@ class APICaller {
     static let shared = APICaller()
     
     //TMDB API CALL : Trending Movies
-    func getTrendingMovies(completion: @escaping (Result<[Title], Error>) -> Void) {
+    func getTrendingMovies(completion: @escaping (Result<[Title], Error>) ->  Void) {
         
         guard let url = URL(string: "\(constants.baseURL)/3/trending/movie/day?api_key=\(constants.API_KEY)") else { return }
         
@@ -37,7 +37,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch {
-                completion(.failure(APIError.failedToLoadData))
+                completion(.failure(APIError.failedToLoadMovies))
             }
             
         }
@@ -55,7 +55,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToLoadMovies)
             }
         }
         task.resume()
@@ -72,7 +72,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToLoadMovies)
             }
         }
         task.resume()
@@ -89,7 +89,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToLoadMovies)
             }
         }
         task.resume()
@@ -106,7 +106,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToLoadMovies)
             }
         }
         task.resume()
@@ -123,7 +123,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToLoadMovies)
             }
         }
         task.resume()
@@ -143,7 +143,7 @@ class APICaller {
                 let results = try JSONDecoder().decode(TitlesResponse.self, from: data)
                 completion(.success(results.results))
             } catch{
-                print(APIError.failedToLoadData)
+                print(APIError.failedToSeach)
             }
         }
         task.resume()
@@ -163,10 +163,29 @@ class APICaller {
                 let results = try JSONDecoder().decode(YoutubeSearchResonse.self, from: data)
                 completion(.success(results.items[0]))
             } catch{
-                completion(.failure(error))
+                completion(.failure(APIError.failedToLoadPreview))
             }
         }
         task.resume()
     }
     
+}
+
+extension APICaller {
+    enum APIError: LocalizedError {
+        case failedToLoadMovies
+        case failedToLoadPreview
+        case failedToSeach
+        
+        var errorDescription: String? {
+            switch self {
+            case .failedToLoadMovies:
+                return "Loading movies failed, please connect your device to internet."
+            case .failedToLoadPreview:
+                return "Loading trailer preview failed, try again later."
+            case .failedToSeach :
+                return "Failed to search content, try again later."
+            }
+        }
+    }
 }

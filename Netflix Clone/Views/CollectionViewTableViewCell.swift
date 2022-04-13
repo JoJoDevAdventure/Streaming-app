@@ -10,7 +10,9 @@ import UIKit
 //MARK: - Protocols
 
 protocol CollectionViewTableViewCellDelegate: AnyObject {
-    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel)
+    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel, title: Title)
+    
+    func CollectionViewTableViewCellFinishedDownload()
 }
 
 
@@ -75,10 +77,11 @@ class CollectionViewTableViewCell: UITableViewCell {
     //CoreData download :
     private func downloadTitleAt(_ indexPath : IndexPath) {
         let title = titles[indexPath.row]
-        DataPersistantManager.shared.downloadTitleWith(model: title) { result in
+        DataPersistantManager.shared.downloadTitleWith(model: title) {[weak self] result in
             switch result {
             case .success() :
-                print("downloaded to the database")
+                NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
+                self?.delegate?.CollectionViewTableViewCellFinishedDownload()
             case .failure(let error) :
                 print(error.localizedDescription)
             }
@@ -123,10 +126,10 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
             case . success(let videoElement) :
                 
                 let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
-                self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel )
+                self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel, title: title )
             case .failure(let error):
                 let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
-                self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
+                self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel, title: title)
                 print(error.localizedDescription)
             }
         }
@@ -156,10 +159,10 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
                             let title = self?.titles[indexPath.row]
                             guard let titleOverview = title?.overview else { return }
                             let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title?.release_date, voteCount: title?.vote_count, voteAverge: title?.vote_average)
-                            self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel )
+                            self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel, title: title! )
                         case .failure(let error):
                             let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title?.release_date, voteCount: title?.vote_count, voteAverge: title?.vote_average)
-                            self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
+                            self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel, title: title!)
                             print(error.localizedDescription)
                         }
                     }
@@ -168,4 +171,5 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
         }
         return config
     }
+
 }

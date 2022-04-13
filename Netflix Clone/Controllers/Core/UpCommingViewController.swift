@@ -99,6 +99,7 @@ extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
             case .success(let videoElement) :
                 DispatchQueue.main.async { [weak self] in
                     let vc = TitlePreviewViewController()
+                    vc.currentTitle = title
                     let model = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
                     vc.configure(with: model)
                     self?.navigationController?.pushViewController(vc, animated: true)
@@ -106,6 +107,7 @@ extension UpCommingViewController: UITableViewDelegate, UITableViewDataSource {
             case .failure(let error) :
                 DispatchQueue.main.async { [weak self] in
                     let vc = TitlePreviewViewController()
+                    vc.currentTitle = title
                     let model = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: title.release_date, voteCount: title.vote_count, voteAverge: title.vote_average)
                     vc.configure(with: model)
                     self?.navigationController?.pushViewController(vc, animated: true)

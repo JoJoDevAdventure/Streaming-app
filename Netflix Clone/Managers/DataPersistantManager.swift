@@ -42,7 +42,6 @@ class DataPersistantManager {
             try context.save()
             completion(.success(()))
         } catch {
-            print(error.localizedDescription)
             completion(.failure(DataBaseError.failedToSaveData))
         }
     }
@@ -62,7 +61,6 @@ class DataPersistantManager {
             let titles = try context.fetch(request)
             completion(.success(titles))
         } catch {
-            print(error.localizedDescription)
             completion(.failure(DataBaseError.failedToFetchData))
         }
     }
@@ -73,14 +71,14 @@ class DataPersistantManager {
         
         let context = appDelegate.persistentContainer.viewContext
         
-        let request: NSFetchRequest<TitleItem>
-        
-        request = TitleItem.fetchRequest()
+        context.delete(model) // asking database manager to delete object
         
         do {
             
+            try context.save()
+            completion(.success(()))
+            
         } catch {
-            print(error.localizedDescription)
             completion(.failure(DataBaseError.failedToDelete))
         }
     }

@@ -1,17 +1,18 @@
 //
-//  UpcomingTableViewCell.swift
+//  TitleDownloadTableViewCell.swift
 //  Netflix Clone
 //
-//  Created by Youssef Bhl on 06/04/2022.
+//  Created by Youssef Bhl on 12/04/2022.
 //
 
 import UIKit
+import Lottie
 
-class TitleTableViewCell: UITableViewCell {
-    
+class TitleDownloadTableViewCell: UITableViewCell {
+
     // MARK: - Properties
     
-    static let identifier = "TitleTableViewCell"
+    static let identifier = "TitleDownloadTableViewCell"
     
     private let upcomingPoster: UIImageView = {
         let image = UIImageView()
@@ -29,13 +30,14 @@ class TitleTableViewCell: UITableViewCell {
         return label
     }()
     
-    let playButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "play.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
-        button.setImage(image, for: .normal)
-        button.tintColor = .label
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    let DownloadAnimation: AnimationView = {
+        let animatedDownload = AnimationView()
+        animatedDownload.translatesAutoresizingMaskIntoConstraints = false
+        animatedDownload.animation = Animation.named("download")
+        animatedDownload.contentMode = .scaleAspectFit
+        animatedDownload.loopMode = .loop
+        animatedDownload.play()
+        return animatedDownload
     }()
     
     // MARK: - Life cycle
@@ -55,7 +57,7 @@ class TitleTableViewCell: UITableViewCell {
     private func setupSubViews() {
         addSubview(upcomingPoster)
         addSubview(movieLabel)
-        addSubview(playButton)
+        addSubview(DownloadAnimation)
     }
     
     //Constraints
@@ -69,19 +71,20 @@ class TitleTableViewCell: UITableViewCell {
         
         let labelConstraints = [
             movieLabel.leadingAnchor.constraint(equalTo: upcomingPoster.trailingAnchor, constant: 30),
-            movieLabel.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -15),
+            movieLabel.trailingAnchor.constraint(equalTo: DownloadAnimation.leadingAnchor, constant: -15),
             movieLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ]
         
-        let buttonConstriants = [
-            playButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            playButton.widthAnchor.constraint(equalToConstant: 50),
-            playButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        let downloadAnimationConstriants = [
+            DownloadAnimation.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            DownloadAnimation.widthAnchor.constraint(equalToConstant: 30),
+            DownloadAnimation.heightAnchor.constraint(equalToConstant: 30),
+            DownloadAnimation.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ]
         
         NSLayoutConstraint.activate(imageConstraints)
         NSLayoutConstraint.activate(labelConstraints)
-        NSLayoutConstraint.activate(buttonConstriants)
+        NSLayoutConstraint.activate(downloadAnimationConstriants)
     }
     
     // MARK: - Functions
@@ -91,5 +94,5 @@ class TitleTableViewCell: UITableViewCell {
         upcomingPoster.sd_setImage(with: url, completed: nil)
         movieLabel.text = model.titleName
     }
-    
+
 }

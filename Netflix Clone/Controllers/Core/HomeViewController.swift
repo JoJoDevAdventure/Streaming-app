@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 enum Sections: Int {
     case TrendingMovies = 0
@@ -19,10 +20,12 @@ class HomeViewController: UIViewController {
     
     // MARK: - Properties
     
-    var trendTitles : Title?
+    var trendHeaderTitle : Title?
     var headerView : HeroHeaderUIView?
     
     let sectionTitles: [String] = ["Trending Movies", "Trending Tv", "Upcoming movies",  "Popular", "Top rated"]
+    
+    let doneDownloadAnimation = AnimationView()
     
     private let homeFeedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -35,12 +38,12 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubViews()
-        setupTableView()
         setupHeaderView()
+        setupTableView()
         setupNavBar()
+        setupObservers()
+        setupDownloadAnimation()
     }
-    
-
     
     // MARK: - Set up
     
@@ -57,6 +60,7 @@ class HomeViewController: UIViewController {
     
     private func setupSubViews() {
         view.addSubview(homeFeedTable)
+        view.addSubview(doneDownloadAnimation)
     }
     
     private func setupNavBar() {
@@ -76,20 +80,84 @@ class HomeViewController: UIViewController {
         homeFeedTable.frame = view.bounds
     }
     
+    private func setupObservers() {
+        //pressed play from header
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("PlayFromHeader"), object: nil, queue: nil) {[weak self] _ in
+            guard let titleName = self?.trendHeaderTitle?.original_title ?? self?.trendHeaderTitle?.original_name else {
+                return
+            }
+            guard let titleOverview = self?.trendHeaderTitle?.overview else { return }
+            APICaller.shared.getMovie(with: titleName + " trailer") { [weak self] results in
+                switch results {
+                case . success(let videoElement) :
+                    
+                    let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: self?.trendHeaderTitle?.release_date, voteCount: self?.trendHeaderTitle?.vote_count, voteAverge: self?.trendHeaderTitle?.vote_average)
+                    DispatchQueue.main.async { [weak self] in
+                        let vc = TitlePreviewViewController()
+                        vc.configure(with: viewModel)
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
+                case .failure(_):
+                    let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: nil, titleOverview: titleOverview, releaseDate: self?.trendHeaderTitle?.release_date, voteCount: self?.trendHeaderTitle?.vote_count, voteAverge: self?.trendHeaderTitle?.vote_average)
+                    DispatchQueue.main.async { [weak self] in
+                        let vc = TitlePreviewViewController()
+                        vc.configure(with: viewModel)
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
+        }
+        //pressed Download from header
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("DownloadedFromHeader"), object: nil, queue: nil ) {[weak self] _ in
+            guard let trendHeaderTitle = self?.trendHeaderTitle else {
+                return
+            }
+            DataPersistantManager.shared.downloadTitleWith(model: trendHeaderTitle) { Result in
+                switch Result {
+                case .success() :
+                    NotificationCenter.default.post(name: NSNotification.Name("DownloadedItemFromHome"), object: nil)
+                    self?.playDoneDownloadAnimation()
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    private func setupDownloadAnimation() {
+        doneDownloadAnimation.animation = Animation.named("done")
+        doneDownloadAnimation.contentMode = .scaleAspectFit
+        doneDownloadAnimation.loopMode = .playOnce
+        doneDownloadAnimation.frame = view.bounds
+        doneDownloadAnimation.isHidden = true
+    }
+    
     // MARK: - Functions
     
     private func fetchHeader() {
         APICaller.shared.getTopRated { [weak self] Result in
             switch Result {
             case .success(let titles):
-                self?.trendTitles = titles.randomElement()
-                guard let poster = self?.trendTitles?.poster_path else { return }
-                guard let trendTitles = self?.trendTitles else { return }
+                self?.trendHeaderTitle = titles.randomElement()
+                guard let poster = self?.trendHeaderTitle?.poster_path else { return }
+                guard let trendTitles = self?.trendHeaderTitle else { return }
                 self?.headerView?.currentTitle = trendTitles
                 self?.headerView?.configure(with: poster)
-                self?.headerView?.currentTitle = trendTitles
             case .failure(let error):
                 print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func playDoneDownloadAnimation() {
+        doneDownloadAnimation.isHidden = false
+        let focus = UIFocusEffect()
+        doneDownloadAnimation.focusEffect = .some(focus)
+        doneDownloadAnimation.play {[weak self] done in
+            if done {
+                self?.doneDownloadAnimation.isHidden = true
+            }else {
+                
             }
         }
     }
@@ -210,9 +278,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HomeViewController: CollectionViewTableViewCellDelegate {
-    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
+    func CollectionViewTableViewCellFinishedDownload() {
+        playDoneDownloadAnimation()
+    }
+    
+    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel, title: Title) {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
+            vc.currentTitle = title
             vc.configure(with: viewModel)
             self?.navigationController?.pushViewController(vc, animated: true)
         }

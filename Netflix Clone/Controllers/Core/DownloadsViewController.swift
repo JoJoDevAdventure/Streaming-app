@@ -15,7 +15,7 @@ class DownloadsViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
+        tableView.register(TitleDownloadTableViewCell.self, forCellReuseIdentifier: TitleDownloadTableViewCell.identifier)
         return tableView
     }()
     
@@ -27,6 +27,7 @@ class DownloadsViewController: UIViewController {
         setupSubViews()
         setupTableView()
         fetchLocalStorageForDownload()
+        setupObservers()
     }
     
     // MARK: - Set up
@@ -50,6 +51,12 @@ class DownloadsViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+    
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("DownloadedItemFromHome"), object: nil, queue: nil ) { _ in
+            self.fetchLocalStorageForDownload()
+        }
     }
     
     // MARK: - Functions
@@ -79,7 +86,7 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleDownloadTableViewCell.identifier, for: indexPath) as? TitleDownloadTableViewCell else { return UITableViewCell() }
         cell.configure(with: TitleViewModel(titleName: titles[indexPath.row].original_title ?? "unkown title", posterURL: titles[indexPath.row].poster_path ?? ""))
         return cell
     }
@@ -98,6 +105,7 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
             case .success(let videoElement) :
                 DispatchQueue.main.async { [weak self] in
                     let vc = TitlePreviewViewController()
+                    vc.downloadBtn.isEnabled = false
                     let model = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview, releaseDate: title.release_date,voteCount: Int(title.vote_count), voteAverge: title.vote_average)
                     vc.configure(with: model)
                     self?.navigationController?.pushViewController(vc, animated: true)
@@ -108,5 +116,21 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle {
+        case .delete :
+            DataPersistantManager.shared.deleteTitileWith(model: titles[indexPath.row]) {[weak self] results in
+                switch results {
+                case .success() :
+                    self?.titles.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        default:
+            break;
+        }
+    }
+
 }
