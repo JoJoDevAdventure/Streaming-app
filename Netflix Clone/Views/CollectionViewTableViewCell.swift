@@ -145,7 +145,7 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
                     self?.downloadTitleAt(indexPath)
                 }
                 
-                let seeMoreAction = UIAction(title: "See mote", image: UIImage(systemName: "eye"), identifier: nil, discoverabilityTitle: nil, state: .off) {[weak self] _ in
+                let seeMoreAction = UIAction(title: "See more", image: UIImage(systemName: "eye"), identifier: nil, discoverabilityTitle: nil, state: .off) {[weak self] _ in
                     let title = self?.titles[indexPath.row]
                     guard let titleName = title!.original_title ?? title!.original_name else {
                         return
