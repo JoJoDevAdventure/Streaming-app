@@ -119,6 +119,7 @@ class TitlePreviewViewController: UIViewController {
         configureConstraints()
         setupObservers()
         setupDownloadAnimation()
+        view.backgroundColor = .black
     }
     
     // MARK: - Set up
@@ -152,7 +153,7 @@ class TitlePreviewViewController: UIViewController {
         ]
         
         let releaseDateLabeLConstraints = [
-            releaseDateLabeL.topAnchor.constraint(equalTo: overViewLabel.bottomAnchor, constant: 30),
+            releaseDateLabeL.topAnchor.constraint(equalTo: overViewLabel.bottomAnchor, constant: 20),
             releaseDateLabeL.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
         ]
         
@@ -160,7 +161,7 @@ class TitlePreviewViewController: UIViewController {
             overViewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
             overViewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             overViewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant : -10),
-            overViewLabel.heightAnchor.constraint(equalToConstant:160)
+            overViewLabel.heightAnchor.constraint(equalToConstant:130)
         ]
         
         let buttonConstraints = [
