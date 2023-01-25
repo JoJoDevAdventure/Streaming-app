@@ -40,7 +40,7 @@
 		A3DF164328068B5A00A53F4D /* StreamingKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF164228068B5A00A53F4D /* StreamingKitTests.swift */; };
 		A3DF164428068B5A00A53F4D /* StreamingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A3DF163428068B5A00A53F4D /* StreamingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3DF164728068B5A00A53F4D /* StreamingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; };
-		A3DF164828068B5A00A53F4D /* StreamingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A3DF164828068B5A00A53F4D /* StreamingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3DF163228068B5A00A53F4D /* StreamingKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A3DF165128068B9A00A53F4D /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF165028068B9900A53F4D /* VideoPlayer.swift */; };
 		A3FB047127FDFC91003E7EE1 /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FB047027FDFC90003E7EE1 /* TitleTableViewCell.swift */; };
 		A3FB047327FE50F2003E7EE1 /* TitleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FB047227FE50F2003E7EE1 /* TitleViewModel.swift */; };
@@ -661,6 +661,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -689,6 +690,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
