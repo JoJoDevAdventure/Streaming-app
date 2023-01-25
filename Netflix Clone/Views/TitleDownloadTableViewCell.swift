@@ -103,3 +103,4 @@ class TitleDownloadTableViewCell: UITableViewCell {
     }
 
 }
+ 
