@@ -13,8 +13,6 @@ class SearchViewController: UIViewController {
     
     private var titles: [Title] = []
     
-
-    
     private let discoverTable: UITableView = {
         let table = UITableView()
         table.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
